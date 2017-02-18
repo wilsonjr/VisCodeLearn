@@ -14,6 +14,10 @@ $(document).ready(function() {
 		var radius = 3;
 		var multiplier = 1.5;
 
+		d3.select('body')
+		  .append('h2')
+		  .text('World Cup Attendance');
+
 		var svg = d3.select('body')
 		  .append('svg')
 		  	.attr('width', width+margin)
