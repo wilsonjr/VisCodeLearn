@@ -7,6 +7,10 @@ $(document).ready(function() {
 			width = 1400-margin, 
 			height = 600-margin;
 
+		var radius = 3;
+		var color = 'blue';
+		var multiplier = 1.5;
+
 		var svg = d3.select('body')
 		  .append('svg')
 		  	.attr('width', width+margin)
@@ -57,6 +61,20 @@ $(document).ready(function() {
 		  .attr('class', 'y axis')
 		  .attr('transform', 'translate('+margin+',0)')
 		  .call(count_axis);
+
+		d3.selectAll('circle')
+		  .attr('cx', function(d) {
+		  	  return time_scale(d['date']);
+		  })
+		  .attr('cy', function(d) {
+		  	  return count_scale(d['attendance']);
+		  })
+		  .attr('r', function(d) {
+		  	  return radius;
+		  })
+		  .attr('fill', function(d) {
+		  	  return 'blue';
+		  });
 
 
 	}
