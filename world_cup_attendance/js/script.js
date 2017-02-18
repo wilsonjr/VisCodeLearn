@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+	function is_home(d) {
+		return d['home'] == d['team1'] || d['home'] == d['team2'];
+	}
+
 	function draw(data) {
 
 		'use strict';
@@ -70,9 +74,13 @@ $(document).ready(function() {
 		  	  return count_scale(d['attendance']);
 		  })
 		  .attr('r', function(d) {
+		  	  if( is_home(d) )
+		  	  	  return radius*multiplier;
 		  	  return radius;
 		  })
 		  .attr('fill', function(d) {
+		  	  if( is_home(d) )
+		  	  	  return 'red';
 		  	  return 'blue';
 		  });
 
