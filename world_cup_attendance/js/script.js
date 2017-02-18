@@ -12,7 +12,6 @@ $(document).ready(function() {
 			height = 600-margin;
 
 		var radius = 3;
-		var color = 'blue';
 		var multiplier = 1.5;
 
 		var svg = d3.select('body')
@@ -83,6 +82,37 @@ $(document).ready(function() {
 		  	  	  return 'red';
 		  	  return 'blue';
 		  });
+
+		  var legend = svg.append('g')
+		    .attr('class', 'legend')
+		    .attr('transform', 'translate('+(width-100)+','+20+')')
+		    .selectAll('g')
+		    .data(['Home Team', 'Others'])
+		    .enter().append('g');
+
+		  legend.append('circle')
+		  	.attr('cy', function(d, i) {
+		  		return i*30;
+		  	})
+		  	.attr('r', function(d) {
+		  		if( d == 'Home Team' )
+		  			return radius*multiplier;
+		  		return radius;
+		  	})
+		  	.attr('fill', function(d) {
+		  		if( d == 'Home Team' )
+		  			return 'red';
+		  		return 'blue';
+		  	});
+
+		  legend.append('text')
+		  	.attr('y', function(d, i) {
+		  		return i*30 + 5;
+		  	})
+		  	.attr('x', radius*5)
+		  	.text(function(d) {
+		  		return d;
+		  	});
 
 
 	}
