@@ -2,7 +2,43 @@ $(document).ready(function() {
 
 	function draw(data) {
 
-		console.log(data);
+		'use strict';
+		var margin = 75, 
+			width = 1400-margin, 
+			height = 600-margin;
+
+		var svg = d3.select('body')
+		  .append('svg')
+		  	.attr('width', width+margin)
+		  	.attr('height', height+margin)
+		  .append('g')
+		  	.attr('class', 'chart');
+
+
+		d3.select('svg')
+		  .selectAll('circle')
+		  .data(data)
+		  .enter()
+		  .append('circle');
+
+
+		var time_extent = d3.extent(data, function(d) {
+			return d['date'];
+		});
+
+		var count_extent = d3.extent(data, function(d) {
+			return d['attendance'];
+		});
+
+		var time_scale = d3.time.scale()
+		  .range([margin, width])
+		  .domain(time_extent);
+
+		var count_scale = d3.scale.linear()
+		  .range([height, margin])
+		  .domain(count_extent);
+
+
 	}
 
 
