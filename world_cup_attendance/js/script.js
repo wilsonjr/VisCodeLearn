@@ -38,6 +38,26 @@ $(document).ready(function() {
 		  .range([height, margin])
 		  .domain(count_extent);
 
+		var time_axis = d3.svg.axis()
+		  .scale(time_scale)
+		  .ticks(d3.time.years, 2);
+
+		var count_axis = d3.svg.axis()
+		  .scale(count_scale)
+		  .orient('left');
+
+		d3.select('svg')
+		  .append('g')
+		  .attr('class', 'x axis')
+		  .attr('transform', 'translate(0,'+height+')')
+		  .call(time_axis);
+
+		d3.select('svg')
+		  .append('g')
+		  .attr('class', 'y axis')
+		  .attr('transform', 'translate('+margin+',0)')
+		  .call(count_axis);
+
 
 	}
 
