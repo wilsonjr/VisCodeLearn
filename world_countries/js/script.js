@@ -23,7 +23,8 @@ $(document).ready(function() {
 					.data(geo_data.features)
 					.enter()
 					.append('path')
-					.attr('d', path);
+					.attr('d', path)
+					.style('fill', 'rgb(9, 157, 217)');
 
 	};
 
