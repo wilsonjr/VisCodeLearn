@@ -25,7 +25,8 @@ $(document).ready(function() {
 					.append('path')
 					.attr('d', path)
 					.style('fill', 'rgb(9, 157, 217)')
-					.style('stroke', 'black');
+					.style('stroke', 'black')
+					.style('stroke-width', 0.5);
 
 	};
 
