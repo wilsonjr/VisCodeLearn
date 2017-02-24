@@ -28,6 +28,19 @@ $(document).ready(function() {
 					.style('stroke', 'black')
 					.style('stroke-width', 0.5);
 
+
+		function plot_points(data) {
+
+		};
+
+		var format = d3.time.format('%d-%m-%Y (%H:%M h)');
+
+		d3.tsv('dataset/world_cup_geo.tsv', function(d) {
+			d['attendance'] = +d['attendance'];
+			d['date'] = format.parse(d['date']);
+			return d;
+		}, plot_points);
+
 	};
 
 
