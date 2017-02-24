@@ -31,7 +31,7 @@ $(document).ready(function() {
 
 		function plot_points(data) {
 			// draw circles 
-			var nested = d3.next()
+			var nested = d3.nest()
 							.key(function(d) { // grouping
 								return d['date'].getUTCFullYear();
 							})
@@ -59,6 +59,16 @@ $(document).ready(function() {
 								}
 							}) 
 							.entries(data);
+
+			svg.append('g')
+			  .attr('class', 'bubble')
+			  .selectAll('circle')
+			  .data(nested)
+			  .enter()
+			  .append('circle')
+			  .attr('cx', function(d) { return d.values['x']; })
+			  .attr('cy', function(d) { return d.values['y']; })
+			  .attr('r', 5);
 
 		};
 
