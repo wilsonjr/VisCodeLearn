@@ -30,6 +30,11 @@ $(document).ready(function() {
 
 
 		function plot_points(data) {
+			// draw circles 
+			var nested = d3.next()
+							.key()
+							.rollup() 
+							.entries(data);
 
 		};
 
