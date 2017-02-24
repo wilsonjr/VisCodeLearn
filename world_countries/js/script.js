@@ -32,8 +32,32 @@ $(document).ready(function() {
 		function plot_points(data) {
 			// draw circles 
 			var nested = d3.next()
-							.key()
-							.rollup() 
+							.key(function(d) { // grouping
+								return d['date'].getUTCFullYear();
+							})
+							.rollup(function(leaves) { // aggregation
+								var total = d3.sum(leaves, function(d) {
+									return d['attendance'];
+								});
+
+								var coords = leaves.map(function(d) {
+									return projection([+d.long, +d.lat]);
+								});
+
+								var center_x = d3.mean(coords, function(d) {
+									return d[0];
+								});
+
+								var center_y = d3.mean(coords, function(d) {
+									return d[1];
+								});
+
+								return {
+									'attendance': total,
+									'x': center_x,
+									'y': center_y
+								}
+							}) 
 							.entries(data);
 
 		};
