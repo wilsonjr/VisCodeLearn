@@ -7,6 +7,10 @@ $(document).ready(function() {
 			width = 1920-margin,
 			height = 1080-margin;
 
+		d3.select('body')
+			.append('h2')
+			.text('World Cup');
+
 		var svg = d3.select('body')
 			.append('svg')
 			.attr('width', width+margin)
@@ -93,6 +97,46 @@ $(document).ready(function() {
 			  .attr('cx', function(d) { return d.values['x']; })
 			  .attr('cy', function(d) { return d.values['y']; })
 			  .attr('r', function(d) { return radius(d.values['attendance']); });
+
+
+
+		    function update(year) {
+		    	var filtered = nested.filter(function(d) {
+		    		return new Date(d['key']).getUTCFullYear() === year;
+		    	});
+
+		    	d3.select('h2')
+		    		.text('World Cup '+year);
+
+		    	var circles = svg.selectAll('circle')
+		    					.data(filtered, key_func);
+
+		    	circles.exit().remove();
+
+		    	circles.enter()
+		    		.append('circle')
+		    		.transition()
+		    		.duration(500)
+		    		.attr('cx', function(d) { return d.values['x']; })
+		    		.attr('cy', function(d) { return d.values['y']; })
+		    		.attr('r', function(d) { return radius(d.values['attendance']); });
+
+		    	var countries = filtered[0].values['teams'];
+
+		    	function update_countries(d) {
+		    		if( countries.indexOf(d.properties.name) !== -1 )
+		    			return 'lightBlue';
+		    		else 
+		    			return 'white';
+		    	};
+
+		    	svg.selectAll('path')
+		    		.transition()
+		    		.duration(500)
+		    		.style('fill', update_countries)
+		    		.style('stroke', update_countries);
+
+		    };
 
 		};
 
