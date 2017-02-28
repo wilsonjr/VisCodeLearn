@@ -72,6 +72,13 @@ $(document).ready(function() {
 							.rollup(agg_year) 
 							.entries(data);
 
+			var attendance_extent = d3.extent(nested, function(d) {
+				return d.values['attendance'];
+			});
+
+			var radius = d3.scale.sqrt().domain(attendance_extent).range([0, 12]);
+
+
 			svg.append('g')
 			  .attr('class', 'bubble')
 			  .selectAll('circle')
@@ -80,7 +87,7 @@ $(document).ready(function() {
 			  .append('circle')
 			  .attr('cx', function(d) { return d.values['x']; })
 			  .attr('cy', function(d) { return d.values['y']; })
-			  .attr('r', 5);
+			  .attr('r', function(d) { return radius(d.values['attendance']); });
 
 		};
 
