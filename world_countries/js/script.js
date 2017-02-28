@@ -30,34 +30,46 @@ $(document).ready(function() {
 
 
 		function plot_points(data) {
-			// draw circles 
+			
+			function agg_year(leaves) {
+
+				var total = d3.sum(leaves, function(d) {
+					return d['attendance'];
+				});
+
+				var coords = leaves.map(function(d) {
+					return projection([+d.long, +d.lat]);
+				});
+
+				var center_x = d3.mean(coords, function(d) {
+					return d[0];
+				});
+
+				var center_y = d3.mean(coords, function(d) {
+					return d[1];
+				});
+
+				var teams = d3.set();
+
+				leaves.forEach(function(d) {
+					teams.add(d['team1']);
+					teams.add(d['team2']);
+				});
+
+				return {
+					'attendance': total,
+					'x': center_x,
+					'y': center_y,
+					'teams': teams.values()
+				};
+
+			};
+
 			var nested = d3.nest()
 							.key(function(d) { // grouping
 								return d['date'].getUTCFullYear();
 							})
-							.rollup(function(leaves) { // aggregation
-								var total = d3.sum(leaves, function(d) {
-									return d['attendance'];
-								});
-
-								var coords = leaves.map(function(d) {
-									return projection([+d.long, +d.lat]);
-								});
-
-								var center_x = d3.mean(coords, function(d) {
-									return d[0];
-								});
-
-								var center_y = d3.mean(coords, function(d) {
-									return d[1];
-								});
-
-								return {
-									'attendance': total,
-									'x': center_x,
-									'y': center_y
-								}
-							}) 
+							.rollup(agg_year) 
 							.entries(data);
 
 			svg.append('g')
