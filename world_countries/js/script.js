@@ -124,10 +124,7 @@ $(document).ready(function() {
 		    	var countries = filtered[0].values['teams'];
 
 		    	function update_countries(d) {
-		    		if( countries.indexOf(d.properties.name) !== -1 )
-		    			return 'lightBlue';
-		    		else 
-		    			return 'white';
+		    		return (countries.indexOf(d.properties.name) !== -1) ? 'lightBlue' : 'white';
 		    	};
 
 		    	svg.selectAll('path')
