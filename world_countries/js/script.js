@@ -18,6 +18,13 @@ $(document).ready(function() {
 			.append('g')
 			.attr('class', 'map');
 
+		var years = [];
+		for( var i = 1930; i < 2015; i += 4 ) {
+			if( i != 1942 && i != 1946 )
+				years.push(i);
+		}
+
+
 		var projection = d3.geo.mercator()
 							.scale(170)
 							.translate([width/2, height/2]);
