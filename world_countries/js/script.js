@@ -78,11 +78,16 @@ $(document).ready(function() {
 
 			var radius = d3.scale.sqrt().domain(attendance_extent).range([0, 12]);
 
+			function key_func(d) {
+				return d['key'];
+			};
 
 			svg.append('g')
 			  .attr('class', 'bubble')
 			  .selectAll('circle')
-			  .data(nested)
+			  .data(nested.sort(function(a, b) {
+			  	  return b.values['attendance'] - a.values['attendance'];
+			  }), key_func)
 			  .enter()
 			  .append('circle')
 			  .attr('cx', function(d) { return d.values['x']; })
