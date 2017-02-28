@@ -142,6 +142,44 @@ $(document).ready(function() {
 
 		    };
 
+
+		    var year_idx = 0;
+		    var year_interval = setInterval(function() {
+		    	update(years[year_idx]);
+
+		    	if( ++year_idx >= years.length ) {
+		    		clearInterval(year_interval);
+
+		    		var buttons = d3.select('body')
+		    			.append('div')
+		    			.attr('class', 'years_buttons')
+		    			.selectAll('div')
+		    			.data(years)
+		    			.enter()
+		    			.append('div')
+		    			.text(function(d) {
+		    				return d;
+		    			});
+
+		    		buttons.on('click', function(d) {
+		    			d3.selectAll('.years_buttons > div')
+		    				.transition()
+		    				.duration(500)
+		    				.style('background', 'rgb(251, 201, 127)')
+		    				.style('color', 'black');
+
+		    			d3.select(this)
+		    				.transition()
+		    				.duration(500)
+		    				.style('background', 'lightBlue')
+		    				.style('color', 'white');
+
+		    			update(d);
+		    		});
+		    	}	
+
+		    }, 1000);
+
 		};
 
 		var format = d3.time.format('%d-%m-%Y (%H:%M h)');
