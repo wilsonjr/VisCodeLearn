@@ -4,8 +4,8 @@ $(document).ready(function() {
 
 		'use strict';
 		var margin = 75,
-			width = 1920-margin,
-			height = 1080-margin;
+			width = 960-margin,
+			height = 960-margin;
 
 		d3.select('body')
 			.append('h2')
@@ -26,7 +26,7 @@ $(document).ready(function() {
 
 
 		var projection = d3.geo.mercator()
-							.scale(170)
+							.scale((width-3)/(2*Math.PI))
 							.translate([width/2, height/2]);
 		var path = d3.geo.path().projection(projection);
 
