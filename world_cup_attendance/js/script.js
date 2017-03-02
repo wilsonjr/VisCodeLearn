@@ -8,8 +8,8 @@ $(document).ready(function() {
 
 		'use strict';
 		var margin = 75, 
-			width = 1400-margin, 
-			height = 600-margin;
+			width = 960-margin, 
+			height = 500-margin;
 
 		var radius = 3;
 		var multiplier = 1.5;
