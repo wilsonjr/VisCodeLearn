@@ -3,9 +3,10 @@ $(document).ready(function() {
 	function draw(geo_data) {
 
 		'use strict';
-		var margin = 75,
-			width = 960-margin,
-			height = 960-margin;
+        var margin = 75,
+            width = 1920 - margin,
+            height = 1080 - margin;
+
 
 		d3.select('body')
 			.append('h2')
@@ -26,7 +27,7 @@ $(document).ready(function() {
 
 
 		var projection = d3.geo.mercator()
-							.scale((width-3)/(2*Math.PI))
+							.scale(170)
 							.translate([width/2, height/2]);
 		var path = d3.geo.path().projection(projection);
 
