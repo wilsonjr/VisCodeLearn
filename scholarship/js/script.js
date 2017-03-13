@@ -64,6 +64,7 @@ $(document).ready(function(){
 			return d.values['sc_total'];
 		});
 
+
 		
 		var scholarship_scale = d3.scale.linear()
 			.range([height/2, margin])
@@ -71,15 +72,24 @@ $(document).ready(function(){
 
 		var scholarship_axis = d3.svg.axis()
 			.scale(scholarship_scale)
+			.tickValues([0, max_scholarship/2, max_scholarship])
 			.orient('left');
 
+		var svg = d3.select('svg');
 
-		d3.select('svg')
+		svg.selectAll('years')
+			.data(nested)
+			.enter()
 			.append('g')
-			.attr('class', 'y axis')
-			.attr('transform', 'translate('+margin+',0)')
-			.call(scholarship_axis);
-
+				.attr('class', 'years')
+				.attr('transform', function(d, i) {
+					return 'translate('+(margin + i*50)+',0)';
+				})
+			.append('g')
+				.attr('class', 'y axis')
+				.each(function(d) {
+					d3.select(this).call(scholarship_axis);
+				});
 	};
 
 
