@@ -4,7 +4,7 @@ $(document).ready(function(){
 	function draw(data) {
 
 		'use strict';
-		var margin = 50,
+		var margin = 70,
 			width = 960-margin,
 			height = 500-margin;
 
@@ -59,6 +59,26 @@ $(document).ready(function(){
 			.rollup(agg_year)
 			.entries(data);
 
+
+		var max_scholarship = d3.max(nested, function(d) {
+			return d.values['sc_total'];
+		});
+
+		
+		var scholarship_scale = d3.scale.linear()
+			.range([height/2, margin])
+			.domain([0, max_scholarship]);
+
+		var scholarship_axis = d3.svg.axis()
+			.scale(scholarship_scale)
+			.orient('left');
+
+
+		d3.select('svg')
+			.append('g')
+			.attr('class', 'y axis')
+			.attr('transform', 'translate('+margin+',0)')
+			.call(scholarship_axis);
 
 	};
 
