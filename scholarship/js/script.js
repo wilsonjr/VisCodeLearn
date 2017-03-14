@@ -8,6 +8,15 @@ $(document).ready(function(){
 			width = 960-margin,
 			height = 500-margin;
 
+		var margins = {};
+		margins['COUNTRY'] = {x: width/2, y: 0};
+		margins['NORTE'] = {x: 50, y: 0};
+		margins['NORDESTE'] = {x: 100, y: 0};
+		margins['CENTRO-OESTE'] = {x: 150, y: 0};
+		margins['SUDESTE'] = {x: 200, y: 0};
+		margins['SUL'] = {x: 250, y: 0};
+
+
 		d3.select('body')
 			.append('svg')
 				.attr('width', width+margin)
@@ -42,6 +51,7 @@ $(document).ready(function(){
 
 
 			return {
+				'desc': 'COUNTRY',
 				'sc_total': norte+nordeste+centro+sudeste+sul,
 				'sc_norte': norte,
 				'sc_nordeste': nordeste,
@@ -64,11 +74,11 @@ $(document).ready(function(){
 			return d.values['sc_total'];
 		});
 
-
+		var radius = d3.scale.sqrt().domain([0, max_scholarship]).range([0, 5]);
 		
 		var scholarship_scale = d3.scale.linear()
-			.range([height/2, margin])
-			.domain([0, max_scholarship]);
+			.domain([0, max_scholarship])			
+			.range([height/2, margin]);
 
 		var scholarship_axis = d3.svg.axis()
 			.scale(scholarship_scale)
@@ -83,13 +93,30 @@ $(document).ready(function(){
 			.append('g')
 				.attr('class', 'years')
 				.attr('transform', function(d, i) {
-					return 'translate('+(margin + i*50)+',0)';
+					return 'translate('+(margins[d.values.desc].x + i*50)+',0)';
 				})
 			.append('g')
 				.attr('class', 'y axis')
 				.each(function(d) {
 					d3.select(this).call(scholarship_axis);
 				});
+
+		svg.selectAll('circle')
+			.data(nested)
+			.enter()
+			.append('circle')
+			.attr('cy', function(d) {
+				return scholarship_scale(d.values['sc_total']);
+			})	
+			.attr('cx', function(d, i) {
+				return (margins[d.values['desc']].x + i*50);
+			})
+			.attr('r', function(d) {
+				return radius(d.values['sc_total']);
+			})
+			.attr('fill', function(d) {
+				return 'blue';
+			});
 	};
 
 
