@@ -8,6 +8,10 @@
 	stroke: black;
 }
 
+.tick line {
+	visibility: hidden;
+}
+
 .line_plot {
 	fill: none;
 	stroke: #4eb0bb;

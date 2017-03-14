@@ -82,8 +82,9 @@ $(document).ready(function(){
 
 		var scholarship_axis = d3.svg.axis()
 			.scale(scholarship_scale)
-			.tickValues([0,  max_scholarship])
-			.orient('left');
+			.tickValues([0,  max_scholarship/2, max_scholarship])
+			.orient('left')
+			.outerTickSize(0);
 
 		var svg = d3.select('svg');
 
