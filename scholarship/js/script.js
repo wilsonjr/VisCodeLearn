@@ -51,14 +51,32 @@ $(document).ready(function(){
 
 
 			return {
-				'desc': 'COUNTRY',
-				'sc_total': norte+nordeste+centro+sudeste+sul,
-				'sc_norte': norte,
-				'sc_nordeste': nordeste,
-				'sc_centro': centro,
-				'sc_sudeste': sudeste,
-				'sc_sul': sul
+				'description': 'COUNTRY',
+				'total': norte+nordeste+centro+sudeste+sul,
+				'norte': norte,
+				'nordeste': nordeste,
+				'centro': centro,
+				'sudeste': sudeste,
+				'sul': sul
 			};
+		};
+
+		function agg_region(leaves) {
+
+			var years = new Set(leaves.map(function(d) {
+				return d['ANO_CONCESSAO_BOLSA'];
+			}));
+
+			var region_scholarship = {};
+			for( let item of years )
+				region_scholarship[item] = leaves.filter(function(d) {
+					return d['ANO_CONCESSAO_BOLSA'] == item;
+				}).length;
+
+
+			region_scholarship['description'] = leaves[0]['REGIAO_BENEFICIARIO_BOLSA'];
+
+			return region_scholarship; 
 		};
 
 
@@ -69,9 +87,8 @@ $(document).ready(function(){
 			.rollup(agg_year)
 			.entries(data);
 
-
 		var max_scholarship = d3.max(nested, function(d) {
-			return d.values['sc_total'];
+			return d.values['total'];
 		});
 
 		var radius = d3.scale.sqrt().domain([0, max_scholarship]).range([0, 5]);
@@ -94,7 +111,7 @@ $(document).ready(function(){
 			.append('g')
 				.attr('class', 'years')
 				.attr('transform', function(d, i) {
-					return 'translate('+(margins[d.values.desc].x + i*50)+',0)';
+					return 'translate('+(margins[d.values['description']].x + i*50)+',0)';
 				})
 			.append('g')
 				.attr('class', 'y axis')
@@ -107,17 +124,25 @@ $(document).ready(function(){
 			.enter()
 			.append('circle')
 			.attr('cy', function(d) {
-				return scholarship_scale(d.values['sc_total']);
+				return scholarship_scale(d.values['total']);
 			})	
 			.attr('cx', function(d, i) {
-				return (margins[d.values['desc']].x + i*50);
+				return (margins[d.values['description']].x + i*50);
 			})
 			.attr('r', function(d) {
-				return radius(d.values['sc_total']);
+				return radius(d.values['total']);
 			})
 			.attr('fill', function(d) {
 				return 'blue';
 			});
+
+
+		var nested_region = d3.nest()
+			.key(function(d) {
+				return d['REGIAO_BENEFICIARIO_BOLSA'];
+			})	
+			.rollup(agg_region)
+			.entries(data);
 	};
 
 
