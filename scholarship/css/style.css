@@ -7,3 +7,15 @@
 	fill: none;
 	stroke: black;
 }
+
+.line_plot {
+	fill: none;
+	stroke: #4eb0bb;
+	stroke-width: 1px;
+}
+
+path {
+	fill: none;
+	stroke: black;
+	stroke-width: 1px;
+}
