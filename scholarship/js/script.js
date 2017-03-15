@@ -175,7 +175,7 @@ $(document).ready(function(){
 					for( var i = min_year; i <= max_year; ++i )
 						arr.push(d[i+'']);
 
-					var s = d3.select(this)
+					d3.select(this)
 						.selectAll('years')
 						.data(arr)
 						.enter()
@@ -203,39 +203,41 @@ $(document).ready(function(){
 				});
 
 
-	/*	svg.selectAll('region')
+		svg.selectAll('region')
 			.data(values)
 			.enter()
 			.append('g')
 				.attr('class', 'region')
 				.each(function(d, i) {
+					var description = d.description;
 					var max = d.max;
 					var arr = new Array();
 					for( var i = min_year; i <= max_year; ++i )
+						arr.push(d[i+'']);
 
-
-					svg.selectAll('circle')
-						.data(nested_region)
+					d3.select(this)
+						.selectAll('circle')
+						.data(arr)
 						.enter()
 						.append('circle')
 							.attr('cy', function(d) {
 								var scale = d3.scale.linear()
-									.domain([0, d.values['max']])
-									.range([height/2, margin]);
+									.domain([0, max])
+									.range([height/3 + margins[description].y, margin + margins[description].y]);
 
-								return scale(d.values['']);
+								return scale(d);
 							})
 							.attr('cx', function(d, i) {
-
+								return (margins[description].x + i*30);
 							})
 							.attr('r', function(d) {
-
+								return d3.scale.sqrt().domain([0, max]).range([0, 5])(d);
 							})
 							.attr('fill', function(d) {
 								return 'red';
 							});
 
-				});*/
+				});
 
 
 		
