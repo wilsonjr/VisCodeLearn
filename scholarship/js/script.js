@@ -4,18 +4,17 @@ $(document).ready(function(){
 	function draw(data) {
 
 		'use strict';
-		var margin = 70,
+		var margin = 20,
 			width = 960-margin,
 			height = 500-margin;
 
 		var margins = {};
-		margins['COUNTRY'] = {x: width/2, y: 0};
-		margins['NORTE'] = {x: 50, y: 0};
-		margins['NORDESTE'] = {x: 100, y: 0};
-		margins['CENTRO-OESTE'] = {x: 150, y: 0};
-		margins['SUDESTE'] = {x: 200, y: 0};
-		margins['SUL'] = {x: 250, y: 0};
-
+		margins['COUNTRY'] = {x: width/2 - 100, y: 0};
+		margins['NORTE'] = {x: 50, y: 200};
+		margins['NORDESTE'] = {x: 230, y: 200};
+		margins['CENTRO-OESTE'] = {x: 410, y: 200};
+		margins['SUDESTE'] = {x: 580, y: 200};
+		margins['SUL'] = {x: 760, y: 200};
 
 		d3.select('body')
 			.append('svg')
@@ -68,17 +67,30 @@ $(document).ready(function(){
 			}));
 
 			var region_scholarship = {};
-			for( let item of years )
+			var max = -1;
+			for( let item of years ) {
 				region_scholarship[item] = leaves.filter(function(d) {
 					return d['ANO_CONCESSAO_BOLSA'] == item;
 				}).length;
+				if( region_scholarship[item] > max )
+					max = region_scholarship[item];
+			}
 
 
 			region_scholarship['description'] = leaves[0]['REGIAO_BENEFICIARIO_BOLSA'];
+			region_scholarship['max'] = max;
 
 			return region_scholarship; 
 		};
 
+
+		var min_year = d3.min(nested, function(d) {
+			return d.key;
+		});
+
+		var max_year = d3.max(nested, function(d) {
+			return d.key;
+		});
 
 		var nested = d3.nest()
 			.key(function(d) {
@@ -95,7 +107,7 @@ $(document).ready(function(){
 		
 		var scholarship_scale = d3.scale.linear()
 			.domain([0, max_scholarship])			
-			.range([height/2, margin]);
+			.range([height/2.5, margin]);
 
 		var scholarship_axis = d3.svg.axis()
 			.scale(scholarship_scale)
@@ -123,18 +135,19 @@ $(document).ready(function(){
 			.data(nested)
 			.enter()
 			.append('circle')
-			.attr('cy', function(d) {
-				return scholarship_scale(d.values['total']);
-			})	
-			.attr('cx', function(d, i) {
-				return (margins[d.values['description']].x + i*50);
-			})
-			.attr('r', function(d) {
-				return radius(d.values['total']);
-			})
-			.attr('fill', function(d) {
-				return 'blue';
-			});
+				.attr('cy', function(d) {
+					return scholarship_scale(d.values['total']);
+				})	
+				.attr('cx', function(d, i) {
+					return (margins[d.values['description']].x + i*50);
+				})
+				.attr('r', function(d) {
+					return radius(d.values['total']);
+				})
+				.attr('fill', function(d) {
+					return 'blue';
+				});
+
 
 
 		var nested_region = d3.nest()
@@ -143,6 +156,91 @@ $(document).ready(function(){
 			})	
 			.rollup(agg_region)
 			.entries(data);
+	
+
+		var values = nested_region.map(function(d) { 
+			return d.values;
+		});
+		
+		svg.selectAll('region')
+			.data(values)
+			.enter()
+			.append('g')
+				.attr('class', 'region')
+				.each(function(d, i) {
+					var description = d.description;
+					var max = d.max;
+
+					var arr = new Array();
+					for( var i = min_year; i <= max_year; ++i )
+						arr.push(d[i+'']);
+
+
+					var s = d3.select(this)
+						.selectAll('years')
+						.data(arr)
+						.enter()
+						.append('g')
+							.attr('class', 'years')
+							.attr('transform', function(d, i) {
+								return 'translate('+( (margins[description].x + i*30) )+', '+margins[description].y+')';
+							})
+						.append('g')
+							.attr('class', 'y axis')
+							.each(function(d, i) {
+
+								var scale = d3.scale.linear()
+									.domain([0, max])
+									.range([height/3, margin]);
+
+								var axis = d3.svg.axis()
+									.scale(scale)
+									.tickValues([0, max])
+									.orient('left')
+									.outerTickSize(0);
+
+								d3.select(this).call(axis);
+							});
+				});
+
+
+	/*	svg.selectAll('region')
+			.data(values)
+			.enter()
+			.append('g')
+				.attr('class', 'region')
+				.each(function(d, i) {
+					var max = d.max;
+					var arr = new Array();
+					for( var i = min_year; i <= max_year; ++i )
+
+
+					svg.selectAll('circle')
+						.data(nested_region)
+						.enter()
+						.append('circle')
+							.attr('cy', function(d) {
+								var scale = d3.scale.linear()
+									.domain([0, d.values['max']])
+									.range([height/2, margin]);
+
+								return scale(d.values['']);
+							})
+							.attr('cx', function(d, i) {
+
+							})
+							.attr('r', function(d) {
+
+							})
+							.attr('fill', function(d) {
+								return 'red';
+							});
+
+				});*/
+
+
+		
+		
 	};
 
 
