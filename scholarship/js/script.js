@@ -84,6 +84,13 @@ $(document).ready(function(){
 		};
 
 
+		var nested = d3.nest()
+			.key(function(d) {
+				return d['ANO_CONCESSAO_BOLSA'];
+			})
+			.rollup(agg_year)
+			.entries(data);
+
 		var min_year = d3.min(nested, function(d) {
 			return d.key;
 		});
@@ -91,13 +98,6 @@ $(document).ready(function(){
 		var max_year = d3.max(nested, function(d) {
 			return d.key;
 		});
-
-		var nested = d3.nest()
-			.key(function(d) {
-				return d['ANO_CONCESSAO_BOLSA'];
-			})
-			.rollup(agg_year)
-			.entries(data);
 
 		var max_scholarship = d3.max(nested, function(d) {
 			return d.values['total'];
@@ -174,7 +174,6 @@ $(document).ready(function(){
 					var arr = new Array();
 					for( var i = min_year; i <= max_year; ++i )
 						arr.push(d[i+'']);
-
 
 					var s = d3.select(this)
 						.selectAll('years')
