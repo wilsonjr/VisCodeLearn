@@ -149,6 +149,20 @@ $(document).ready(function(){
 				});
 
 
+		svg.selectAll('path')
+			.data(nested)
+			.enter()
+			.append('path')
+				.attr('class', 'line')
+				.attr('d', d3.svg.line(nested.map(function(d) {
+					debugger;
+					return [scholarship_scale(d.values['total']), (margins[d.values['description']].x + i*50)];	
+				})))
+				.attr('stroke', 'blue')
+				.attr('stroke-width', 2)
+				.attr('fill', 'none');
+
+
 
 		var nested_region = d3.nest()
 			.key(function(d) {
