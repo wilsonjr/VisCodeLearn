@@ -18,9 +18,25 @@
 	stroke-width: 1px;
 }
 
+path {
+	fill: none;
+	stroke: black;
+	stroke-width: 1px;
+}
+
 
 .line-country path {
 	fill: none;
-	stroke: red;
-	shape-rendering: crispEdges;
+	stroke: #37e;
+	stroke-width: 2px;
+	shape-rendering: geometricPrecision;
+	opacity: 0.3;
+}
+
+.line-regions path {
+	fill: none;
+	stroke: #e73;
+	stroke-width: 2px;
+	shape-rendering: geometricPrecision;
+	opacity: 0.3;
 }
