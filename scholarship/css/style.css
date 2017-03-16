@@ -18,8 +18,9 @@
 	stroke-width: 1px;
 }
 
-path {
+
+.line-country path {
 	fill: none;
-	stroke: black;
-	stroke-width: 1px;
+	stroke: red;
+	shape-rendering: crispEdges;
 }

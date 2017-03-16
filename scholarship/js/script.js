@@ -148,19 +148,24 @@ $(document).ready(function(){
 					return 'blue';
 				});
 
+		var line_function = d3.svg.line()
+								.x(function(d, i) {
+									return margins[d.values['description']].x + i*50;
+								})
+								.y(function(d) {
+									return scholarship_scale(d.values['total']);
+								})
+								.interpolate('linear');
 
-		svg.selectAll('path')
+
+		
+		svg.append('g')
+				.attr('class', 'line-country')
+			.selectAll('path')
 			.data(nested)
 			.enter()
 			.append('path')
-				.attr('class', 'line')
-				.attr('d', d3.svg.line(nested.map(function(d) {
-					debugger;
-					return [scholarship_scale(d.values['total']), (margins[d.values['description']].x + i*50)];	
-				})))
-				.attr('stroke', 'blue')
-				.attr('stroke-width', 2)
-				.attr('fill', 'none');
+				.attr('d', line_function(nested));
 
 
 
