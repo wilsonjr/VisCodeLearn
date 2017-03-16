@@ -131,6 +131,23 @@ $(document).ready(function(){
 					d3.select(this).call(scholarship_axis);
 				});
 
+		var line_function = d3.svg.line()
+								.x(function(d, i) {
+									return margins[d.values['description']].x + i*50;
+								})
+								.y(function(d) {
+									return scholarship_scale(d.values['total']);
+								})
+								.interpolate('linear');
+		
+		svg.append('g')
+				.attr('class', 'line-country')
+			.selectAll('path')
+			.data(nested)
+			.enter()
+			.append('path')
+				.attr('d', line_function(nested));
+
 		svg.selectAll('circle')
 			.data(nested)
 			.enter()
@@ -145,27 +162,13 @@ $(document).ready(function(){
 					return radius(d.values['total']);
 				})
 				.attr('fill', function(d) {
-					return 'blue';
+					return '#fff';
+				})
+				.attr('stroke', function(d) {
+					return '#34f';
 				});
 
-		var line_function = d3.svg.line()
-								.x(function(d, i) {
-									return margins[d.values['description']].x + i*50;
-								})
-								.y(function(d) {
-									return scholarship_scale(d.values['total']);
-								})
-								.interpolate('linear');
-
-
 		
-		svg.append('g')
-				.attr('class', 'line-country')
-			.selectAll('path')
-			.data(nested)
-			.enter()
-			.append('path')
-				.attr('d', line_function(nested));
 
 
 
@@ -234,6 +237,28 @@ $(document).ready(function(){
 					for( var i = min_year; i <= max_year; ++i )
 						arr.push(d[i+'']);
 
+					var line_regions = d3.svg.line()
+								.x(function(d, i) {
+									return margins[description].x + i*30;
+								})
+								.y(function(d) {
+									var scale = d3.scale.linear()
+										.domain([0, max])
+										.range([height/3 + margins[description].y, margin + margins[description].y]);
+
+									return scale(d);
+								})
+								.interpolate('linear');
+		
+					d3.select(this).append('g')
+							.attr('class', 'line-regions')
+						.selectAll('path')
+						.data(arr)
+						.enter()
+						.append('path')
+							.attr('d', line_regions(arr));
+					
+
 					d3.select(this)
 						.selectAll('circle')
 						.data(arr)
@@ -253,8 +278,13 @@ $(document).ready(function(){
 								return d3.scale.sqrt().domain([0, max]).range([0, 5])(d);
 							})
 							.attr('fill', function(d) {
-								return 'red';
+								return '#fff';
+							})
+							.attr('stroke', function(d) {
+								return '#f43';
 							});
+
+					
 
 				});
 
