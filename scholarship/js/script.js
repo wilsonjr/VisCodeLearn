@@ -111,7 +111,7 @@ $(document).ready(function(){
 
 		var scholarship_axis = d3.svg.axis()
 			.scale(scholarship_scale)
-			.tickValues([0,  max_scholarship/2, max_scholarship])
+			.tickValues([])
 			.orient('left')
 			.outerTickSize(0);
 
@@ -168,9 +168,6 @@ $(document).ready(function(){
 					return '#34f';
 				});
 
-		
-
-
 
 		var nested_region = d3.nest()
 			.key(function(d) {
@@ -216,7 +213,7 @@ $(document).ready(function(){
 
 								var axis = d3.svg.axis()
 									.scale(scale)
-									.tickValues([0, max])
+									.tickValues([])
 									.orient('left')
 									.outerTickSize(0);
 
