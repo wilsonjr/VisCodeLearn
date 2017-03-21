@@ -9,12 +9,12 @@ $(document).ready(function(){
 			height = 500-margin;
 
 		var margins = {};
-		margins['COUNTRY'] = {x: width/2 - 100, y: 0};
-		margins['NORTE'] = {x: 50, y: 200};
-		margins['NORDESTE'] = {x: 230, y: 200};
-		margins['CENTRO-OESTE'] = {x: 410, y: 200};
-		margins['SUDESTE'] = {x: 580, y: 200};
-		margins['SUL'] = {x: 760, y: 200};
+		margins['COUNTRY'] = {x: width/2 - 100, y: 40};
+		margins['NORTE'] = {x: 50, y: 300};
+		margins['NORDESTE'] = {x: 230, y: 300};
+		margins['CENTRO-OESTE'] = {x: 410, y: 300};
+		margins['SUDESTE'] = {x: 580, y: 300};
+		margins['SUL'] = {x: 760, y: 300};
 
 		d3.select('body')
 			.append('svg')
@@ -123,7 +123,7 @@ $(document).ready(function(){
 			.append('g')
 				.attr('class', 'years')
 				.attr('transform', function(d, i) {
-					return 'translate('+(margins[d.values['description']].x + i*50)+',0)';
+					return 'translate('+(margins[d.values['description']].x + i*50)+','+margins[d.values['description']].y+')';
 				})
 			.append('g')
 				.attr('class', 'y axis')
@@ -136,7 +136,7 @@ $(document).ready(function(){
 									return margins[d.values['description']].x + i*50;
 								})
 								.y(function(d) {
-									return scholarship_scale(d.values['total']);
+									return scholarship_scale(d.values['total']) + margins[d.values['description']].y;
 								})
 								.interpolate('linear');
 		
@@ -153,7 +153,7 @@ $(document).ready(function(){
 			.enter()
 			.append('circle')
 				.attr('cy', function(d) {
-					return scholarship_scale(d.values['total']);
+					return scholarship_scale(d.values['total']) + margins[d.values['description']].y;
 				})	
 				.attr('cx', function(d, i) {
 					return (margins[d.values['description']].x + i*50);
@@ -168,6 +168,46 @@ $(document).ready(function(){
 					return '#34f';
 				});
 
+		var country_legend = svg.append('g')
+			.attr('class', 'legend')
+			.attr('transform', 'translate('+0+',0)')
+			.selectAll('g')
+			.data([0, max_scholarship])
+			.enter().append('g')
+			.append('text')
+				.attr('class', 'legend-text')
+				.attr('y', function(d, i) {
+					return d3.scale.linear()
+						.domain([0, max_scholarship])
+						.range([height/2.35 + margins['COUNTRY'].y, margin + margins['COUNTRY'].y - 5])(d);
+				}) 
+				.attr('x', function(d, i) {
+					return margins['COUNTRY'].x + 2*50 - 3*(d+'').length;
+				})
+				.text(function(d) {
+					return d+'';
+				});
+
+		var country_legend_name = svg.append('g')
+			.attr('class', 'legend')
+			.attr('transform', 'translate('+0+',0)')
+			.selectAll('g')
+			.data(['BRAZIL'])
+			.enter().append('g')
+			.append('text')
+				.attr('class', 'legend-text-name')
+				.attr('y', function(d, i) {
+					return d3.scale.linear()
+						.domain([0, max_scholarship])
+						.range([height/2.2 + margins['COUNTRY'].y, margin + margins['COUNTRY'].y - 5])(0);
+				}) 
+				.attr('x', function(d, i) {
+					return margins['COUNTRY'].x + 2*50 - 3.7*(d).length;
+				})
+				.text(function(d) {
+					return d;
+				});
+
 
 		var nested_region = d3.nest()
 			.key(function(d) {
@@ -180,6 +220,8 @@ $(document).ready(function(){
 		var values = nested_region.map(function(d) { 
 			return d.values;
 		});
+
+		var max_value = d3.max(values, function(d) {return d.max;});
 		
 		svg.selectAll('region')
 			.data(values)
@@ -188,7 +230,7 @@ $(document).ready(function(){
 				.attr('class', 'region')
 				.each(function(d, i) {
 					var description = d.description;
-					var max = d.max;
+					var max = max_value;
 
 					var arr = new Array();
 					for( var i = min_year; i <= max_year; ++i )
@@ -219,6 +261,47 @@ $(document).ready(function(){
 
 								d3.select(this).call(axis);
 							});
+
+
+					var legend = d3.select(this).append('g')
+						.attr('class', 'legend')
+						.attr('transform', 'translate(0,0)')
+						.selectAll('g')
+						.data([0, max])
+						.enter().append('g')
+						.append('text')
+							.attr('class', 'legend-text')
+							.attr('y', function(d, i) {
+								return d3.scale.linear()
+									.domain([0, max])
+									.range([height/2.8 + margins[description].y, margin + margins[description].y - 5])(d);
+							}) 
+							.attr('x', function(d, i) {
+								return margins[description].x + 2*30 - 3*(d+'').length;
+							})
+							.text(function(d) {
+								return d+'';
+							});
+
+					var country_legend_name = svg.append('g')
+						.attr('class', 'legend')
+						.attr('transform', 'translate('+0+',0)')
+						.selectAll('g')
+						.data([description])
+						.enter().append('g')
+						.append('text')
+							.attr('class', 'legend-text-name')
+							.attr('y', function(d, i) {
+								return d3.scale.linear()
+									.domain([0, max])
+									.range([height/2.6 + margins[description].y, margin + margins[description].y - 5])(0);
+							}) 
+							.attr('x', function(d, i) {
+								return margins[description].x + 2*30 - 4.5*(d).length;
+							})
+							.text(function(d) {
+								return d;
+							});
 				});
 
 
@@ -229,7 +312,7 @@ $(document).ready(function(){
 				.attr('class', 'region')
 				.each(function(d, i) {
 					var description = d.description;
-					var max = d.max;
+					var max = max_value;//d.max;
 					var arr = new Array();
 					for( var i = min_year; i <= max_year; ++i )
 						arr.push(d[i+'']);
