@@ -41,7 +41,7 @@ path {
 	opacity: 0.3;
 }
 
-.legend-text {
+.legend-text, .legend-year {
 	font-family: arial;
 	font-size: 0.6em;
 	font-weight: bold;

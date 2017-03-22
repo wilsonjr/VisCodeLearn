@@ -208,6 +208,31 @@ $(document).ready(function(){
 					return d;
 				});
 
+		var country_legend_year = svg.append('g')
+			.attr('class', 'legend')
+			.attr('transform', 'translate(0, 0)')
+			.selectAll('g')
+			.data(d3.extent(data, function(d) {
+				return d['ANO_CONCESSAO_BOLSA'];
+			}))
+			.enter().append('g')
+			.append('text')
+				.attr('class', 'legend-year')
+				.attr('y', function(d, i) {
+					return d3.scale.linear()
+						.domain([0, max_scholarship])
+						.range([height/2.5 + margins['COUNTRY'].y, margin + margins['COUNTRY'].y - 5])(0);
+				})
+				.attr('x', function(d, i) {
+					return d3.scale.linear()
+						.domain([0, 1])
+						.range([margins['COUNTRY'].x - 7*(d+'').length, margins['COUNTRY'].x + (max_year-min_year)*51])(i);
+				})
+				.text(function(d) {
+					return d+'';
+				})
+
+
 
 		var nested_region = d3.nest()
 			.key(function(d) {
