@@ -197,9 +197,7 @@ $(document).ready(function(){
 			.append('text')
 				.attr('class', 'legend-text-name')
 				.attr('y', function(d, i) {
-					return d3.scale.linear()
-						.domain([0, max_scholarship])
-						.range([height/2.2 + margins['COUNTRY'].y, margin + margins['COUNTRY'].y - 5])(0);
+					return height/2.2 + margins['COUNTRY'].y;
 				}) 
 				.attr('x', function(d, i) {
 					return margins['COUNTRY'].x + 2*50 - 3.7*(d).length;
@@ -219,9 +217,7 @@ $(document).ready(function(){
 			.append('text')
 				.attr('class', 'legend-year')
 				.attr('y', function(d, i) {
-					return d3.scale.linear()
-						.domain([0, max_scholarship])
-						.range([height/2.5 + margins['COUNTRY'].y, margin + margins['COUNTRY'].y - 5])(0);
+					return height/2.5 + margins['COUNTRY'].y;
 				})
 				.attr('x', function(d, i) {
 					return d3.scale.linear()
@@ -392,9 +388,53 @@ $(document).ready(function(){
 					
 
 				});
+	
+
+		var legend = svg.append('g')
+		    .attr('class', 'legend')
+		    .attr('transform', 'translate('+(width-200)+','+100+')')
+		    .selectAll('g')
+		    .data(['Whole Country', 'Regions'])
+		    .enter().append('g');
+
+		  legend.append('circle')
+		  	.attr('cy', function(d, i) {
+		  		return i*30;
+		  	})
+		  	.attr('r', 5)
+		  	.attr('fill', function(d) {
+		  		return '#fff';
+		  	})
+		  	.attr('stroke', function(d) {
+		  		if( d == 'Whole Country' )
+		  			return '#34f';
+		  		return '#f43';
+		  	});
+
+		  legend.append('text')
+		  	.attr('y', function(d, i) {
+		  		return i*30 + 5;
+		  	})
+		  	.attr('x', 10)
+		  	.text(function(d) {
+		  		return d;
+		  	});
 
 
-		
+		var title = svg.append('g')
+			.attr('class', 'title')
+			.attr('transform', 'translate('+width/2+','+margin+')')
+			.selectAll('g')
+			.data(['Scholarships given from 2012 to 2016'])
+			.enter().append('g')
+			.append('text')
+				.attr('y', 0)
+				.attr('x', function(d) {
+					return -7.5*d.length/2;
+				})
+				.text(function(d) {
+					return d;
+				})
 		
 	};
 
